@@ -3,7 +3,7 @@
 https://www.kaggle.com/paultimothymooney/chest-xray-pneumonia
 
 ## Run the web app
-Start a simple HTTP server on port 8000 from the directory with the index.html file:
-If you have Node.js, install the http-server package globally and run:
-http-server -p 8000
-Open http://localhost:8000
+Start a simple HTTP server on port 8000 from the directory with the index.html file:<br>
+If you have Node.js, install the http-server package globally and run:<br>
+http-server -p 8000<br>
+Open http://localhost:8000 <br>
