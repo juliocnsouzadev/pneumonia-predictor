@@ -1,0 +1,89 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+  integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<script src="https://unpkg.com/@tensorflow/tfjs"></script>
+<script src="https://unpkg.com/@tensorflow/tfjs-automl"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+  integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+  integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+  integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+<script>
+  function getBestPrediction(predictions) {
+    let first = predictions[0].prob;
+    let second = predictions[1].prob;
+
+    if (first > second) return predictions[0];
+    return predictions[1];
+  }
+
+  async function run() {
+    const model = await tf.automl.loadImageClassification('assets/model.json');
+    const image = document.getElementById('imageContainer');
+    const predictions = await model.classify(image);
+    // Show the resulting object on the page.
+    const bestPrediction = getBestPrediction(predictions);
+    const predResult = `${bestPrediction.label.toLowerCase()} with ${bestPrediction.prob.toFixed(2) * 100}% of probability`
+
+    const pre = document.getElementById('predictionResult');
+    pre.textContent = predResult;
+    pre.className = bestPrediction.label === "NORMAL" ? 
+                    "btn btn-lg btn-success" : 
+                    "btn btn-lg btn-danger"
+  }
+
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+        $('#imageContainer')
+          .attr('src', e.target.result);
+        run();
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+</script>
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <div class="row" style="margin-bottom:-55" >
+      <div class="col-lg-2">
+        <img src="imgs/lung.svg" class="img-thumbnail rounded float-left" alt="..." />
+      </div>
+
+      <div class="col-lg-8">
+        
+      </div>
+      <div class="col-lg-2">
+        <img src="imgs/ia.png" class="img-thumbnail rounded float-right" alt="..." />
+      </div>
+    </div>
+    <h1 class="text-center" style="margin-bottom: 12px;">PNEUMONIA XRAY PREDICTOR</h1>
+    <p class="lead">Predictions made by a Tensorflow Deep Learning Model trained on Kaggle Dataset:
+      <a href="https://www.kaggle.com/paultimothymooney/chest-xray-pneumonia">Chest X-Ray Images (Pneumonia)</a>
+    </p>
+   
+    <input type='file' class="btn btn-dark btn-lg btn-block" onchange="readURL(this);" />
+
+
+    <div class="card mb-3">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <div class="card-body">
+            <h5 class="card-title">Prediction Result:</h5>
+            <p class="btn btn-lg btn-light" id="predictionResult" style="text-transform: capitalize">Nothing to show yet.</p>
+          </div>
+        </div>
+
+        <div class="col-md-8">
+          <img id="imageContainer" src="#" alt="" class="img-fluid" />
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
