@@ -9,4 +9,7 @@ http-server -p 8000<br>
 Open http://localhost:8000 <br>
 
 ## Demo
+### Live
+https://juliocnsouzadev.github.io/pneumonia-predictor/
+### Vídeo
 [![Demo](imgs/player.png)](https://www.youtube.com/watch?v=qYsVW2vaXRE "Pnemonia Predictor Demo")
